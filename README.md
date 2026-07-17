@@ -38,7 +38,7 @@ npm run crawl -- --url <url> [options]
   --concurrency <n>        concurrent page visits (default: 3)
   --headless <bool>        run browser headless (default: true)
   --mobile                 also capture mobile-viewport screenshots
-  --llm                    enable Claude-based summarization/classification (needs ANTHROPIC_API_KEY)
+  --llm                    enable AI summarization/classification (needs ANTHROPIC_API_KEY or OPENAI_API_KEY)
   --web-search              look up additional public info about the company via web search
   -o, --output <dir>       output directory (default: "output")
 ```
@@ -49,8 +49,9 @@ Example with every bonus flag on:
 npm run crawl -- --url https://linear.app --mobile --llm --web-search --concurrency 4
 ```
 
-For `--llm`, copy `.env.example` to `.env` and set `ANTHROPIC_API_KEY`. Without a key, `--llm` is a
-no-op (logs a notice and continues) — it never blocks the rest of the run.
+For `--llm`, copy `.env.example` to `.env` and set `ANTHROPIC_API_KEY` and/or `OPENAI_API_KEY`. If both
+are set, Anthropic (Claude) is used; otherwise it falls back to OpenAI (ChatGPT). Without either key,
+`--llm` is a no-op (logs a notice and continues) — it never blocks the rest of the run.
 
 ## Running tests
 
@@ -92,7 +93,7 @@ src/
 
   screenshot/screenshotService.ts   full-page desktop (+ optional mobile) capture
   search/webSearch.ts               optional DuckDuckGo lookup for extra public company info
-  ai/summarizer.ts                  optional Claude summarization/classification
+  ai/summarizer.ts                  optional Claude/ChatGPT summarization/classification
   report/
     logger.ts                  pino logger (pretty console + crawl.log file)
     dashboard.ts                 renders the static HTML report
@@ -113,7 +114,7 @@ tests/                     fixture-based unit tests, mirroring src/ layout
 5. **Extract** company info, contacts, social links, tech stack, branding, and leadership from the
    aggregated page snapshots — all pure, cheerio-based functions with no browser dependency, which is
    what makes them fast to unit test.
-6. **Optional bonus stages**: Claude summarization/classification (`--llm`), public web search
+6. **Optional bonus stages**: Claude/ChatGPT summarization/classification (`--llm`), public web search
    (`--web-search`).
 7. **Assemble + validate** the final `CompanyProfile` against a Zod schema, write `result.json`, and
    render `dashboard.html`.

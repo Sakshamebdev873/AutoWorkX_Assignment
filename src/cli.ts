@@ -14,7 +14,7 @@ program
   .option("--concurrency <n>", "concurrent page visits", String(DEFAULT_CONFIG.concurrency))
   .option("--headless <bool>", "run browser headless", "true")
   .option("--mobile", "also capture mobile-viewport screenshots", false)
-  .option("--llm", "enable Claude-based summarization/classification (requires ANTHROPIC_API_KEY)", false)
+  .option("--llm", "enable AI summarization/classification (requires ANTHROPIC_API_KEY or OPENAI_API_KEY)", false)
   .option("--web-search", "look up additional public info about the company via web search", false)
   .option("-o, --output <dir>", "output directory", DEFAULT_CONFIG.outputDir)
   .parse(process.argv);
